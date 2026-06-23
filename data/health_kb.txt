@@ -1,0 +1,61 @@
+DENGUE FEVER
+Symptoms: High fever (104°F), severe headache, pain behind eyes, joint and muscle pain, skin rash, mild bleeding from nose or gums, nausea and vomiting.
+Prevention: Use mosquito repellents, wear full-sleeve clothes, eliminate standing water around home, use mosquito nets, keep surroundings clean.
+Treatment: No specific antiviral treatment exists. Rest, drink plenty of fluids, take paracetamol for fever. Avoid aspirin and ibuprofen as they increase bleeding risk.
+Emergency Signs: Severe abdominal pain, persistent vomiting, bleeding from gums or nose, difficulty breathing, cold and clammy skin. Go to hospital immediately if these occur.
+
+MALARIA
+Symptoms: Fever with chills and sweating, headache, nausea, vomiting, body aches, fatigue, and in severe cases confusion. Symptoms typically appear 10-15 days after an infected mosquito bite.
+Prevention: Sleep under insecticide-treated bed nets, take antimalarial medication if traveling to high-risk areas, use insect repellent containing DEET, wear long sleeves at dusk and dawn.
+Treatment: Antimalarial medications prescribed by a doctor based on the parasite type. Early treatment is critical for full recovery.
+Emergency Signs: High fever with chills especially after travel to malaria-prone regions, confusion, difficulty breathing, or seizures require immediate medical attention.
+
+TYPHOID FEVER
+Symptoms: Sustained high fever (103-104°F) lasting several days, weakness, stomach pain, headache, loss of appetite, and sometimes a rash of flat, rose-colored spots.
+Prevention: Drink only safe or boiled water, eat properly cooked food, wash hands regularly with soap, get vaccinated if traveling to endemic areas.
+Treatment: A course of antibiotics prescribed by a doctor. It is essential to complete the full course even after symptoms improve to prevent relapse.
+Emergency Signs: Fever lasting more than 3 days, severe abdominal pain, confusion, or signs of intestinal bleeding require urgent medical care.
+
+COVID-19
+Symptoms: Fever, dry cough, shortness of breath, fatigue, loss of taste or smell, sore throat, headache, and body aches. Symptoms can range from mild to severe.
+Prevention: Stay up to date with vaccination, wear masks in crowded indoor places, wash hands frequently, maintain physical distance from symptomatic individuals.
+Treatment: Rest, fluids, and fever-reducing medication for mild cases. Severe cases require hospitalization, oxygen support, and specialized treatment.
+Emergency Signs: Difficulty breathing, persistent chest pain or pressure, confusion, inability to stay awake, or bluish lips or face require immediate emergency care.
+
+TUBERCULOSIS (TB)
+Symptoms: Persistent cough lasting three weeks or more, coughing up blood, chest pain, unexplained weakness or fatigue, weight loss, fever, and night sweats.
+Prevention: BCG vaccination, ensuring good ventilation in living spaces, avoiding close prolonged contact with active TB patients, completing preventive therapy if exposed.
+Treatment: A strict six-month course of multiple antibiotics. Completing the entire course is critical to prevent drug-resistant TB.
+Emergency Signs: Coughing up significant blood or severe difficulty breathing requires same-day medical evaluation.
+
+CHOLERA
+Symptoms: Sudden onset of profuse watery diarrhea, vomiting, and muscle cramps, leading to rapid dehydration if untreated.
+Prevention: Drink only safe or treated water, eat thoroughly cooked food, wash hands with soap regularly, maintain proper sanitation practices.
+Treatment: Immediate oral rehydration solution (ORS) is the most important first step. Severe cases require intravenous fluids and antibiotics under medical supervision.
+Emergency Signs: Cholera can cause severe dehydration and become life-threatening within hours. Seek emergency care immediately if symptoms appear.
+
+DIABETES
+Symptoms: Frequent urination, excessive thirst, unexplained weight loss, persistent fatigue, blurred vision, and slow-healing wounds or cuts.
+Prevention: Maintain a healthy diet low in refined sugar, exercise regularly, maintain a healthy body weight, and get periodic blood sugar screening.
+Management: Regular blood sugar monitoring, taking prescribed medication or insulin as directed, and maintaining a consistent healthy lifestyle.
+Emergency Signs: Extremely high or extremely low blood sugar levels, confusion, fainting, or rapid breathing require immediate hospital care.
+
+HYPERTENSION (HIGH BLOOD PRESSURE)
+Symptoms: Often has no noticeable symptoms, which is why it is called a "silent" condition. Some people experience headaches, dizziness, or nosebleeds.
+Prevention: Reduce salt intake, exercise regularly, maintain a healthy weight, manage stress, avoid smoking and excessive alcohol consumption.
+Management: Regular blood pressure monitoring, taking prescribed medication consistently, and following a heart-healthy lifestyle.
+Emergency Signs: A severe headache combined with vision changes, chest pain, or shortness of breath can indicate a hypertensive crisis and needs emergency care.
+
+GENERAL HEALTH TIPS
+Wash hands with soap for at least 20 seconds regularly, especially before eating. Drink at least 8 glasses of clean water daily. Exercise for at least 30 minutes every day. Sleep 7 to 8 hours every night for proper recovery. Eat a balanced diet rich in fruits and vegetables. Avoid self-medication and always consult a doctor for proper diagnosis. Stay up to date with recommended vaccinations. Schedule regular health checkups even when feeling well. Avoid smoking and limit alcohol consumption. Practice stress management through activities like yoga or meditation.
+
+EMERGENCY CONTACT NUMBERS (INDIA)
+Medical Emergency Ambulance: 108
+National Health Helpline: 1800-180-1104
+COVID-19 Helpline: 1075
+Mental Health Helpline (iCall): 9152987821
+Poison Control Helpline: 1800-116-117
+Women's Helpline: 181
+
+IMPORTANT DISCLAIMER
+This chatbot provides general health information for educational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of a qualified physician or healthcare provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay seeking it because of information provided here. In case of a medical emergency, call your local emergency number immediately.
