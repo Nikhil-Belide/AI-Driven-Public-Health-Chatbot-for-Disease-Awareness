@@ -58,9 +58,10 @@ def health_chatbot(question: str, llm, tavily_client, qa_chain,
                 "please contact a trusted adult, local authorities, or a helpline immediately.")
 
     # Step 4: ML symptom assessment (advisory only)
-    ml_info, followup = "", None
+    ml_info, followup, followup_context = "", None, ""
     search_question = question
     if use_ml:
+        pending_symptom = state.pending
         update_state_from_message(question, state, llm, predictor)
         assessment = predictor.assess(state)
         ml_info = format_for_llm(assessment)
@@ -69,8 +70,12 @@ def health_chatbot(question: str, llm, tavily_client, qa_chain,
             state.pending = assessment.followup_symptom
         if is_followup_reply and state.symptoms:
             names = [SYMPTOM_LABELS.get(s, s) for s in sorted(state.symptoms)]
-            search_question = (f"I have: {', '.join(names)}. "
-                               "What could this mean and what should I do?")
+            search_question = ", ".join(names)
+            label = SYMPTOM_LABELS.get(pending_symptom,
+                                       pending_symptom.replace("_", " "))
+            reply = "yes" if pending_symptom in state.symptoms else "no"
+            followup_context = (f'You previously asked the user: "Do you also have '
+                                f'{label}?" They answered: {reply}.')
 
     # Step 5: RAG search (static knowledge base)
     rag_info = rag_agent(search_question, qa_chain)
@@ -86,6 +91,7 @@ def health_chatbot(question: str, llm, tavily_client, qa_chain,
         is_emergency=safety["is_emergency"],
         llm=llm,
         ml_info=ml_info,
+        followup_context=followup_context,
     )
 
     if followup:

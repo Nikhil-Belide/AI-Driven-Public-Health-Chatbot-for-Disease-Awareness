@@ -76,6 +76,9 @@ def run():
     out2 = pipeline.health_chatbot("yes", llm, None, None, predictor=pred, state=state)
     assert asked in state.symptoms, state
     assert "Symptom-pattern analysis" in llm.last_prompt
+    # follow-up replies continue the chat instead of re-answering from scratch
+    assert "You previously asked the user" in llm.last_prompt
+    assert "Do NOT repeat advice" in llm.last_prompt
     print("after 'yes' to", asked, "->", pred.assess(state).top3)
 
     # 6) no ML objects -> original behaviour, no ML block in the prompt

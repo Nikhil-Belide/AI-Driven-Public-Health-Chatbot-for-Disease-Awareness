@@ -15,6 +15,7 @@ Guidelines:
 - Structure your answer with short paragraphs or bullet points where helpful.
 - Never provide a definitive diagnosis — only general information.
 - Always end your response with a reminder to consult a qualified doctor.
+- The users are in India. For emergencies, mention 108 (ambulance), never 911.
 """
 
 EMERGENCY_BANNER = (
@@ -26,7 +27,8 @@ EMERGENCY_BANNER = (
 
 
 def generate_response(question: str, rag_info: str, web_info: str,
-                       is_emergency: bool, llm, ml_info: str = "") -> str:
+                       is_emergency: bool, llm, ml_info: str = "",
+                       followup_context: str = "") -> str:
     """
     Builds the final chatbot response using RAG context,
     live web search context, optional ML symptom-pattern output,
@@ -41,7 +43,24 @@ Follow the instructions in the analysis above. Never state or imply the user
 definitely has a disease.
 """
 
-    user_prompt = f"""Question: {question}
+    if followup_context:
+        # The user is answering a follow-up question, so continue the
+        # conversation instead of re-answering the whole original question.
+        user_prompt = f"""{followup_context}
+
+Symptoms so far: {question}
+
+Relevant information from health knowledge base:
+{rag_info}
+{ml_block}
+Reply as a short continuation of the conversation (at most 5 sentences):
+- Briefly acknowledge the user's answer.
+- Say how it changes the picture, following the symptom-pattern analysis.
+- Do NOT repeat advice, lists or warnings you already gave earlier.
+- Do NOT list general possible causes again.
+- End with one short reminder to see a doctor."""
+    else:
+        user_prompt = f"""Question: {question}
 
 Relevant information from health knowledge base:
 {rag_info}
