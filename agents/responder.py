@@ -26,12 +26,21 @@ EMERGENCY_BANNER = (
 
 
 def generate_response(question: str, rag_info: str, web_info: str,
-                       is_emergency: bool, llm) -> str:
+                       is_emergency: bool, llm, ml_info: str = "") -> str:
     """
     Builds the final chatbot response using RAG context,
-    live web search context, and an LLM call, then prepends
-    an emergency banner if needed.
+    live web search context, optional ML symptom-pattern output,
+    and an LLM call, then prepends an emergency banner if needed.
     """
+    ml_block = ""
+    if ml_info:
+        ml_block = f"""
+Symptom-pattern analysis (from an ML model, advisory only, not a diagnosis):
+{ml_info}
+Follow the instructions in the analysis above. Never state or imply the user
+definitely has a disease.
+"""
+
     user_prompt = f"""Question: {question}
 
 Relevant information from health knowledge base:
@@ -39,7 +48,7 @@ Relevant information from health knowledge base:
 
 Relevant recent information from the web:
 {web_info}
-
+{ml_block}
 Using the information above, write a helpful and safe response
 to the user's question. End with a reminder to consult a doctor
 for personal medical advice."""
