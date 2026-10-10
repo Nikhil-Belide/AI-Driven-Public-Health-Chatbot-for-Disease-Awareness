@@ -47,6 +47,32 @@ when needed.
 
 ---
 
+## ML symptom-pattern layer
+
+Between the Safety Agent and the RAG/Search agents, an ML step helps with
+overlapping symptoms:
+
+1. The LLM maps the user's text to a fixed symptom vocabulary (JSON list).
+2. A calibrated Random Forest returns the top-3 conditions with probabilities.
+3. Decision logic: fewer than 2 symptoms -> normal answer; clear winner (3+
+   symptoms, high probability and margin) -> "consistent with X"; overlap ->
+   the bot asks ONE targeted follow-up (e.g. "Do you also have chills?") and
+   remembers the answer across turns; still unclear -> "see a doctor".
+4. The result is passed to the responder as advisory context, never as a diagnosis.
+5. A deterministic red-flag keyword check runs alongside the LLM emergency check.
+
+```bash
+python -m ml.train                      # starter model (synthetic, from the KB)
+python -m ml.train --csv Training.csv   # real dataset (Kaggle format)
+python test_ml.py                       # offline tests, no API keys
+```
+
+The starter model is generated from the symptom profiles in `ml/symptoms.py`,
+so its accuracy figures are not real-world performance. Train on a real
+dataset before relying on it.
+
+---
+
 ## Tech Stack
 
 | Component       | Technology                              |

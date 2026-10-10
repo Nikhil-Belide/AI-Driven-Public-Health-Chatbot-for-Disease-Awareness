@@ -12,6 +12,7 @@ from tavily import TavilyClient
 
 from agents.rag_agent import build_rag_chain
 from pipeline import health_chatbot
+from ml.predictor import SymptomPredictor, SymptomState
 
 # ── Page config ──
 st.set_page_config(
@@ -55,6 +56,7 @@ with st.sidebar:
     st.divider()
     if st.button("🗑️ Clear Chat", use_container_width=True):
         st.session_state.messages = []
+        st.session_state.symptom_state = SymptomState()
         st.rerun()
 
     st.divider()
@@ -73,10 +75,13 @@ def load_resources(groq_api_key: str):
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     qa_chain = build_rag_chain(llm, embeddings, kb_path="data/health_kb.txt")
-    return llm, qa_chain
+    predictor = SymptomPredictor()  # trains a starter model on first run
+    return llm, qa_chain, predictor
 
 
 # ── Chat state ──
+if "symptom_state" not in st.session_state:
+    st.session_state.symptom_state = SymptomState()
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "assistant",
@@ -111,9 +116,13 @@ def handle_question(question: str):
         else:
             with st.spinner("🔍 Searching health knowledge base and latest news..."):
                 try:
-                    llm, qa_chain = load_resources(groq_key)
+                    llm, qa_chain, predictor = load_resources(groq_key)
                     tavily_client = TavilyClient(api_key=tavily_key)
-                    answer = health_chatbot(question, llm, tavily_client, qa_chain)
+                    answer = health_chatbot(
+                        question, llm, tavily_client, qa_chain,
+                        predictor=predictor,
+                        state=st.session_state.symptom_state,
+                    )
                 except Exception as e:
                     answer = f"Something went wrong: {str(e)}"
             st.markdown(answer)

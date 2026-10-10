@@ -15,6 +15,7 @@ Guidelines:
 - Structure your answer with short paragraphs or bullet points where helpful.
 - Never provide a definitive diagnosis — only general information.
 - Always end your response with a reminder to consult a qualified doctor.
+- The users are in India. For emergencies, mention 108 (ambulance), never 911.
 """
 
 EMERGENCY_BANNER = (
@@ -26,20 +27,57 @@ EMERGENCY_BANNER = (
 
 
 def generate_response(question: str, rag_info: str, web_info: str,
-                       is_emergency: bool, llm) -> str:
+                       is_emergency: bool, llm, ml_info: str = "",
+                       followup_context: str = "") -> str:
     """
     Builds the final chatbot response using RAG context,
-    live web search context, and an LLM call, then prepends
-    an emergency banner if needed.
+    live web search context, optional ML symptom-pattern output,
+    and an LLM call, then prepends an emergency banner if needed.
     """
-    user_prompt = f"""Question: {question}
+    ml_block = ""
+    focus = ""
+    if ml_info:
+        ml_block = f"""
+Symptom-pattern analysis (from an ML model, advisory only, not a diagnosis):
+{ml_info}
+Follow the instructions in the analysis above. Never state or imply the user
+definitely has a disease.
+"""
+        focus = """
+Write a FOCUSED answer, not a general health lecture:
+1. One direct sentence naming the closest match(es) from the analysis.
+2. 2-4 short bullets about THAT condition from the knowledge base: typical
+   symptoms, how a doctor usually confirms it, and its warning signs.
+3. What to do now (see a doctor, tests to ask about, safe home care).
+Do NOT give general prevention or hygiene tips, and do NOT list unrelated
+everyday causes (posture, allergies, eye strain) unless the knowledge base has
+nothing on the matched condition. Keep it under about 180 words."""
+
+    if followup_context:
+        # The user is answering a follow-up question, so continue the
+        # conversation instead of re-answering the whole original question.
+        user_prompt = f"""{followup_context}
+
+Symptoms so far: {question}
+
+Relevant information from health knowledge base:
+{rag_info}
+{ml_block}
+Reply as a short continuation of the conversation (at most 5 sentences):
+- Briefly acknowledge the user's answer.
+- Say how it changes the picture, following the symptom-pattern analysis.
+- Do NOT repeat advice, lists or warnings you already gave earlier.
+- Do NOT list general possible causes again.
+- End with one short reminder to see a doctor."""
+    else:
+        user_prompt = f"""Question: {question}
 
 Relevant information from health knowledge base:
 {rag_info}
 
 Relevant recent information from the web:
 {web_info}
-
+{ml_block}{focus}
 Using the information above, write a helpful and safe response
 to the user's question. End with a reminder to consult a doctor
 for personal medical advice."""
