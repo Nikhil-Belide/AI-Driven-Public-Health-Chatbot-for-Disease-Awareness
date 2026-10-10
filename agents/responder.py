@@ -35,6 +35,7 @@ def generate_response(question: str, rag_info: str, web_info: str,
     and an LLM call, then prepends an emergency banner if needed.
     """
     ml_block = ""
+    focus = ""
     if ml_info:
         ml_block = f"""
 Symptom-pattern analysis (from an ML model, advisory only, not a diagnosis):
@@ -42,6 +43,15 @@ Symptom-pattern analysis (from an ML model, advisory only, not a diagnosis):
 Follow the instructions in the analysis above. Never state or imply the user
 definitely has a disease.
 """
+        focus = """
+Write a FOCUSED answer, not a general health lecture:
+1. One direct sentence naming the closest match(es) from the analysis.
+2. 2-4 short bullets about THAT condition from the knowledge base: typical
+   symptoms, how a doctor usually confirms it, and its warning signs.
+3. What to do now (see a doctor, tests to ask about, safe home care).
+Do NOT give general prevention or hygiene tips, and do NOT list unrelated
+everyday causes (posture, allergies, eye strain) unless the knowledge base has
+nothing on the matched condition. Keep it under about 180 words."""
 
     if followup_context:
         # The user is answering a follow-up question, so continue the
@@ -67,7 +77,7 @@ Relevant information from health knowledge base:
 
 Relevant recent information from the web:
 {web_info}
-{ml_block}
+{ml_block}{focus}
 Using the information above, write a helpful and safe response
 to the user's question. End with a reminder to consult a doctor
 for personal medical advice."""

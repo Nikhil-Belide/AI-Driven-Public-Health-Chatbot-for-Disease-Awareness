@@ -72,6 +72,8 @@ def run():
     out = pipeline.health_chatbot("I have fever and headache", llm, None, None,
                                   predictor=pred, state=state)
     assert "To help narrow this down" in out and state.pending, out
+    assert "Closest matches for your symptoms" in out, out
+    assert "FOCUSED answer" in llm.last_prompt
     asked = state.pending
     out2 = pipeline.health_chatbot("yes", llm, None, None, predictor=pred, state=state)
     assert asked in state.symptoms, state
@@ -85,6 +87,11 @@ def run():
     llm2 = StubLLM({})
     pipeline.health_chatbot("What are symptoms of dengue?", llm2, None, None)
     assert "Symptom-pattern" not in llm2.last_prompt
+
+    # 6b) display-name cleanup
+    from ml.predictor import pretty
+    assert pretty("Peptic ulcer diseae") == "Peptic ulcer disease"
+    assert pretty("hepatitis A") == "Hepatitis A"
 
     # 7) deterministic red flag works even when the LLM classifier says "no"
     from agents.safety import has_red_flag

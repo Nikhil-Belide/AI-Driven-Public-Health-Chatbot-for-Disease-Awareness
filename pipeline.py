@@ -22,7 +22,7 @@ from agents.responder import generate_response, OUT_OF_SCOPE_MESSAGE
 from ml.symptoms import SYMPTOM_LABELS
 from ml.predictor import (
     SymptomPredictor, SymptomState, update_state_from_message,
-    format_for_llm, _YES, _NO,
+    format_for_llm, format_matches, _YES, _NO,
 )
 
 
@@ -59,6 +59,7 @@ def health_chatbot(question: str, llm, tavily_client, qa_chain,
 
     # Step 4: ML symptom assessment (advisory only)
     ml_info, followup, followup_context = "", None, ""
+    assessment = None
     search_question = question
     if use_ml:
         pending_symptom = state.pending
@@ -93,6 +94,8 @@ def health_chatbot(question: str, llm, tavily_client, qa_chain,
         ml_info=ml_info,
         followup_context=followup_context,
     )
+
+    response += format_matches(assessment)
 
     if followup:
         response += (f"\n\n**To help narrow this down:** {followup} "

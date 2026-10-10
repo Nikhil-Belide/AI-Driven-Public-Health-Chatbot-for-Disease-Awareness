@@ -156,17 +156,62 @@ def update_state_from_message(question: str, state: SymptomState, llm,
     state.symptoms |= extract_symptoms(question, llm, predictor.symptoms)
 
 
+DISPLAY_NAMES = {
+    "Peptic ulcer diseae": "Peptic ulcer disease",
+    "Osteoarthristis": "Osteoarthritis",
+    "Dimorphic hemmorhoids(piles)": "Piles (hemorrhoids)",
+    "(vertigo) Paroymsal Positional Vertigo": "Vertigo (BPPV)",
+    "Paralysis (brain hemorrhage)": "Brain hemorrhage with paralysis",
+    "GERD": "GERD (acid reflux)",
+}
+SHOW_MIN_PROB = 0.10  # candidates below this are not shown to the user
+
+
+def pretty(name: str) -> str:
+    """Clean up dataset spellings for display."""
+    name = " ".join(str(name).split())
+    if name in DISPLAY_NAMES:
+        return DISPLAY_NAMES[name]
+    return name[:1].upper() + name[1:]
+
+
+def _shown(a: Assessment):
+    keep = [(d, p) for d, p in a.top3 if p >= SHOW_MIN_PROB]
+    return keep or a.top3[:1]
+
+
 def format_for_llm(a: Assessment) -> str:
     """Text block handed to the responder as grounded ML context."""
     if a.status == "need_more" or not a.top3:
         return ""
-    listing = ", ".join(f"{d} ({p:.0%})" for d, p in a.top3)
-    base = (f"Symptoms reported by user: {', '.join(a.symptoms)}.\n"
-            f"ML symptom-pattern model, top matches: {listing}.\n")
+    names = [pretty(d) for d, _ in _shown(a)]
+    syms = ", ".join(s.replace("_", " ").strip() for s in a.symptoms)
+    base = (f"Symptoms reported by user: {syms}.\n"
+            f"Closest matches from the symptom-pattern model, best first: "
+            f"{', '.join(names)}.\n")
     if a.status == "confident":
-        return base + ("The pattern is most consistent with the first match. Say symptoms "
-                       "are 'consistent with' it, NOT that the user has it. Recommend "
-                       "confirming with a doctor/test.")
-    return base + ("The model is NOT confident; several conditions overlap. Do not name one "
-                   "as likely. Mention the possibilities neutrally and advise seeing a "
-                   "doctor.")
+        return base + (f"The symptoms most closely match {names[0]}. Say this directly "
+                       "('your symptoms most closely match ...'), but never say the user "
+                       "definitely has it, and recommend a doctor visit or test to confirm.")
+    return base + ("The match is not certain because several conditions overlap. Name these "
+                   "closest matches in order, say clearly that more information or a "
+                   "doctor's exam is needed to tell them apart, and do not claim one "
+                   "definitely.")
+
+
+def format_matches(a: Assessment) -> str:
+    """User-visible block listing the closest matches (added by code, not the LLM)."""
+    if a is None or a.status == "need_more" or not a.top3:
+        return ""
+    lines = []
+    for i, (d, _) in enumerate(_shown(a), 1):
+        if i == 1:
+            label = "strong match" if a.status == "confident" else "closest match"
+        else:
+            label = "possible match"
+        lines.append(f"{i}. **{pretty(d)}** — {label}")
+    syms = ", ".join(s.replace("_", " ").strip() for s in a.symptoms)
+    return ("\n\n---\n**Closest matches for your symptoms** "
+            "(from a symptom-pattern model, not a diagnosis):\n"
+            + "\n".join(lines)
+            + f"\n\n*Symptoms I understood: {syms}*")
